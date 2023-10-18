@@ -20,6 +20,23 @@ class UserService {
     }
   }
 
+  async signIn(email, plainPassword) {
+    try {
+      const user = await this.userRepository.getByEmail(email);
+      const verifyPassword = this.verifyPassword(plainPassword, user.password);
+      if (!verifyPassword) {
+        console.log("Password Doesn't Match");
+        throw { error: "incorrect Password" };
+      }
+
+      const newToken = this.createToken({ email: user.email, id: user.id });
+      return newToken;
+    } catch (error) {
+      console.log("Something went wrong in SignIn Process.");
+      throw error;
+    }
+  }
+
   verifyPassword(inputPassword, encryptedPassword) {
     try {
       return bcrypt.compareSync(inputPassword, encryptedPassword);
