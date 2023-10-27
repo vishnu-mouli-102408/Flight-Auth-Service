@@ -7,7 +7,11 @@ const { AuthValidators } = require("../../middlewares/index");
 
 router.post("/signup", AuthValidators.validateUserAuth, UserController.create);
 router.post("/signin", AuthValidators.validateUserAuth, UserController.signIn);
-
+router.get(
+  "/user/:id",
+  AuthValidators.validateIsGetUserRequest,
+  UserController.getUser
+);
 router.get("/isAuthenticated", UserController.isAuthenticated);
 router.get(
   "/isAdmin",
